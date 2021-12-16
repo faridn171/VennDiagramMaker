@@ -12,4 +12,4 @@ Intended use:
 Data where values greater than 0 are "increased" and values less than 0 are "decreased". This program was created with log2(foldChange) in mind.
 
 InputFile recommendations:
-Do not use "\", in any group names. Consider replacing any "/"s with "-"s.
+Do not use "/", in any group names. Consider replacing any "/"s with "-"s.
