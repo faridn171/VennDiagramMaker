@@ -6,7 +6,7 @@ import os
 from pathlib import Path
 import shutil
 from matplotlib_venn import venn2, venn3
-
+from venn import venn
 
 def heatmap(df,path):
     figy = len(df.index) * 0.9
@@ -69,6 +69,7 @@ def twoVenn(dfvd,path,list1):
     output1 = pd.concat([total0colc, total1colc, comparison_columnc], axis=1)
     output1.to_excel(VDpath2, index=False)
     plt.clf()
+    plt.close()
 
     comparison_column = np.where((dfvd[list1[0]] < 0) & (dfvd[list1[1]] < 0), dfvd.index, False)
     overlap = np.count_nonzero(comparison_column)
@@ -101,6 +102,7 @@ def twoVenn(dfvd,path,list1):
     output1 = pd.concat([total0colc, total1colc, comparison_columnc], axis=1)
     output1.to_excel(VDpath2, index=False)
     plt.clf()
+    plt.close()
 
 
 def threeVenn(dfvd,path,list1):
@@ -144,6 +146,8 @@ def threeVenn(dfvd,path,list1):
     VDpath = os.path.join(path, list1[0]+"-"+list1[1]+"-"+list1[2] + "-increase")
     plt.savefig(VDpath)
     VDpath2 = (VDpath + "-Data.xlsx")
+    plt.clf()
+    plt.close()
 
     total0colc = pd.DataFrame({list1[0]: total0colb})
     total1colc = pd.DataFrame({list1[1]: total1colb})
@@ -163,7 +167,6 @@ def threeVenn(dfvd,path,list1):
 
     output1 = pd.concat([total0colc, total1colc, total2colc, comparison_columnc, comparison_column0c, comparison_column1c, comparison_column2c], axis=1)
     output1.to_excel(VDpath2, index=False)
-    plt.clf()
 
     comparison_column = np.where((dfvd[list1[0]] < 0) & (dfvd[list1[1]] < 0) & (dfvd[list1[2]] < 0), dfvd.index,
                                  False)
@@ -206,6 +209,8 @@ def threeVenn(dfvd,path,list1):
     VDpath3 = os.path.join(path, list1[0]+"-"+list1[1]+"-"+list1[2]+ "-decrease")
     plt.savefig(VDpath3)
     VDpath4 = (VDpath3 + "-Data.xlsx")
+    plt.clf()
+    plt.close()
 
     total0colc = pd.DataFrame({list1[0]: total0colb})
     total1colc = pd.DataFrame({list1[1]: total1colb})
@@ -227,4 +232,53 @@ def threeVenn(dfvd,path,list1):
         [total0colc, total1colc, total2colc, comparison_columnc, comparison_column0c, comparison_column1c,
          comparison_column2c], axis=1)
     output1.to_excel(VDpath4, index=False)
+
+
+def fourVenn(dfvd,path,list1):
+    #increased
+    total0colV = np.where((dfvd[list1[0]] > 0), dfvd.index, False)
+    total1colV = np.where((dfvd[list1[1]] > 0), dfvd.index, False)
+    total2colV = np.where((dfvd[list1[2]] > 0), dfvd.index, False)
+    total3colV = np.where((dfvd[list1[3]] > 0), dfvd.index, False)
+
+    total0colV = np.delete(total0colV, np.argwhere(total0colV == False))
+    total1colV = np.delete(total1colV, np.argwhere(total1colV == False))
+    total2colV = np.delete(total2colV, np.argwhere(total2colV == False))
+    total3colV = np.delete(total3colV, np.argwhere(total3colV == False))
+
+    dict = {}
+    dict[list1[0]] = set(total0colV.flatten())
+    dict[list1[1]] = set(total1colV.flatten())
+    dict[list1[2]] = set(total2colV.flatten())
+    dict[list1[3]] = set(total3colV.flatten())
+
+    venn(dict)
+
+    VDpath5 = os.path.join(path, list1[0] + "-" + list1[1] + "-" + list1[2] + "-" + list1[3] + "-increase")
+    plt.savefig(VDpath5)
     plt.clf()
+    plt.close()
+
+    #decreased
+    total0col = np.where((dfvd[list1[0]] < 0), dfvd.index, False)
+    total1col = np.where((dfvd[list1[1]] < 0), dfvd.index, False)
+    total2col = np.where((dfvd[list1[2]] < 0), dfvd.index, False)
+    total3col = np.where((dfvd[list1[3]] < 0), dfvd.index, False)
+
+    total0col = np.delete(total0col, np.argwhere(total0col == False))
+    total1col = np.delete(total1col, np.argwhere(total1col == False))
+    total2col = np.delete(total2col, np.argwhere(total2col == False))
+    total3col = np.delete(total3col, np.argwhere(total3col == False))
+
+    dict = {}
+    dict[list1[0]] = set(total0col.flatten())
+    dict[list1[1]] = set(total1col.flatten())
+    dict[list1[2]] = set(total2col.flatten())
+    dict[list1[3]] = set(total3col.flatten())
+
+    venn(dict)
+
+    VDpath6 = os.path.join(path, list1[0] + "-" + list1[1] + "-" + list1[2] + "-" + list1[3] + "-decrease")
+    plt.savefig(VDpath6)
+    plt.clf()
+    plt.close()
